@@ -1,0 +1,77 @@
+import time
+import hashlib
+import os
+
+def method1_time_based():
+    """Uses current time in microseconds"""
+    current_time = int(time.time() * 1000000)
+    return current_time % 1001
+
+def method2_hash_based():
+    """Uses hash of current time"""
+    current_time = str(time.time())
+    hash_obj = hashlib.md5(current_time.encode())
+    hash_int = int(hash_obj.hexdigest(), 16)
+    return hash_int % 1001
+
+def method3_linear_congruential():
+    """Simple Linear Congruential Generator using time as seed"""
+    seed = int(time.time() * 1000000) % 2147483647
+    # LCG parameters (same as used in some implementations)
+    a = 1664525
+    c = 1013904223
+    m = 2**32
+    
+    result = (a * seed + c) % m
+    return result % 1001
+
+def method4_middle_square():
+    """Middle square method using time"""
+    seed = int(time.time() * 1000000) % 10000
+    squared = seed * seed
+    # Extract middle digits
+    str_squared = str(squared).zfill(8)
+    middle = int(str_squared[2:6])
+    return middle % 1001
+
+def method5_os_urandom():
+    """Uses os.urandom for cryptographically secure randomness"""
+    try:
+        random_bytes = os.urandom(4)
+        random_int = int.from_bytes(random_bytes, byteorder='big')
+        return random_int % 1001
+    except:
+        # Fallback to time-based if os.urandom fails
+        return method1_time_based()
+
+def method6_fibonacci_hash():
+    """Uses Fibonacci hashing with time seed"""
+    seed = int(time.time() * 1000000)
+    # Golden ratio multiplier
+    phi = 1.618033988749895
+    result = int((seed * phi) % 1) * 1001
+    return int(result)
+
+def method7_xorshift():
+    """Simple XORShift algorithm"""
+    seed = int(time.time() * 1000000) % 2147483647
+    seed ^= seed << 13
+    seed ^= seed >> 17
+    seed ^= seed << 5
+    return abs(seed) % 1001
+
+# Test all methods
+print("Random numbers between 0 and 1000:")
+print(f"Method 1 (Time-based): {method1_time_based()}")
+print(f"Method 2 (Hash-based): {method2_hash_based()}")
+print(f"Method 3 (Linear Congruential): {method3_linear_congruential()}")
+print(f"Method 4 (Middle Square): {method4_middle_square()}")
+print(f"Method 5 (OS Random): {method5_os_urandom()}")
+print(f"Method 6 (Fibonacci Hash): {method6_fibonacci_hash()}")
+print(f"Method 7 (XORShift): {method7_xorshift()}")
+
+# Run multiple times to show different outputs
+print("\nRunning 5 times to show different outputs:")
+for i in range(5):
+    print(f"Run {i+1}: {method3_linear_congruential()}")
+    time.sleep(0.001)  # Small delay to ensure different time values
