@@ -1,6 +1,6 @@
-import time
-import hashlib
-import os
+time = __import__('time')
+hashlib = __import__('hashlib')
+os = __import__('os')
 
 def method1_time_based():
     """Uses current time in microseconds"""
