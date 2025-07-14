@@ -1,0 +1,14 @@
+# Simple PRNG using Linear Congruential Generator (LCG)
+
+seed = 123456789  # You can change the seed to get different results
+
+# Constants for the LCG (same used in glibc)
+a = 1103515245
+c = 12345
+m = 2**31
+
+# Generate a pseudo-random number between 1 and 1000
+seed = (a * seed + c) % m
+random_number = (seed % 1000) + 1
+
+print("Pseudo-random number (1-1000):", random_number)
