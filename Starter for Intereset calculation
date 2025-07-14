@@ -1,0 +1,45 @@
+# Importing the necessary libraries
+# No external libraries are needed for this script
+
+def calculate_total_amount(base_amount, total_days):
+    """
+    Calculate the total amount after applying 10% interest every 7 days.
+
+    Parameters:
+    base_amount (float): The initial amount (must be less than 1000).
+    total_days (int): The total number of days for which interest is calculated.
+
+    Returns:
+    float: The total amount after interest is applied.
+    """
+    # Check if the base amount is valid
+    if base_amount >= 1000:
+        raise ValueError("Base amount must be less than 1000.")
+    
+    # Initialize the total amount with the base amount
+    total_amount = base_amount
+    
+    # Calculate the number of compounding periods (every 7 days)
+    num_periods = total_days // 7
+    
+    # Apply interest for each compounding period
+    for _ in range(num_periods):
+        total_amount += total_amount * 0.10  # Apply 10% interest
+    
+    return total_amount
+
+# Example usage of the function
+if __name__ == "__main__":
+    try:
+        # Input base amount and total days from the user
+        base_amount = float(input("Enter the base amount (less than 1000): "))
+        total_days = int(input("Enter the total number of days: "))
+        
+        # Calculate the total amount
+        total = calculate_total_amount(base_amount, total_days)
+        
+        # Display the result
+        print(f"Total amount after {total_days} days: ${total:.2f}")
+    
+    except ValueError as e:
+        print(f"Error: {e}")
