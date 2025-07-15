@@ -1,0 +1,30 @@
+import random
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def twisted_transform(pos: int, digit: int) -> int:
+    if pos % 2 == 0:
+        digit *= 2
+        if digit > 9:
+            digit -= 9
+    return digit
+
+def twisted_luhn_sum(digits: list[int]) -> int:
+    return sum(twisted_transform(i + 1, d) for i, d in enumerate(digits))
+
+def generate_valid_twisted_luhn_mod9(count: int):
+    results = []
+    while len(results) < count:
+        prefix = [random.randint(0, 9) for _ in range(15)]
+        for d in range(10):  # Try all possible 16th digits
+            candidate = prefix + [d]
+            if twisted_luhn_sum(candidate) % 9 == 0:
+                results.append("".join(map(str, candidate)))
+                break  # Only need one valid check digit
+    return results
+
+# Example usage
+if __name__ == "__main__":
+    valid_numbers = generate_valid_twisted_luhn_mod9(100)
+    print(f"Generated {len(valid_numbers)} valid numbers.")
+    print(valid_numbers[:10])
